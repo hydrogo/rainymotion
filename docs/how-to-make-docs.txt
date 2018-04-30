@@ -1,0 +1,22 @@
+We use Sphinx library for generating documentation.
+
+Nice intro for first setup is provided by RTD team: http://docs.readthedocs.io/en/latest/getting_started.html
+
+The most important files are:
+* docs/source/index.rst 
+* docs/source/conf.py
+
+Because of we want to generate docs automaticaly, we need to run special process for generating docs from docstrings in our modules:
+docs$ sphinx-autogen source/*.rst 
+
+This will generate required files directly specified in toctrees (see: http://www.sphinx-doc.org/en/master/man/sphinx-autogen.html)
+
+For first we can run docs creation by:
+docs$ make html
+
+For updating and re-building:
+docs$ sphinx-autobuild source/ _build/html
+
+Environment installation
+1. conda env create -f environment_docs.yml
+2. python setup.py install 

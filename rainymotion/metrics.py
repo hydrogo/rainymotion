@@ -1,6 +1,8 @@
 """
-Efficiency (goodness of fit) metrics for precipitation nowcasting
-=================================================================
+`rainymotion.metrics`: efficiency (goodness of fit) metrics for precipitation nowcasting
+========================================================================================
+
+We provide different goodness of fit metrics for nowcasting models' performance evaluation. 
 
 .. autosummary::
    :nosignatures:
@@ -27,23 +29,43 @@ from __future__ import print_function
 
 import numpy as np
 
-####################################################################################
 ### Regression metrics ###
 
 def R(obs, sim):
-        '''
-        coefficient of correlation
-        '''
-        obs = obs.flatten()
-        sim = sim.flatten()
+    """
+    Correlation coefficient
+
+    Reference: https://docs.scipy.org/doc/numpy-1.14.0/reference/generated/numpy.corrcoef.html
+
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
         
-        return np.corrcoef(obs, sim)[0, 1]
+    Returns:
+        r (float): correlation coefficient between observed and simulated values
+
+    """
+    obs = obs.flatten()
+    sim = sim.flatten()
+        
+    return np.corrcoef(obs, sim)[0, 1]
         
     
 def R2(obs, sim):
-    '''
-    coefficient of determination
-    '''
+    """
+    Coefficient of determination
+
+    Reference: http://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html
+
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+    
+    Returns:
+        r2 (float): coefficient of determination between observed and simulated values
+    
+    """
+
     obs = obs.flatten()
     sim = sim.flatten()
 
@@ -55,9 +77,19 @@ def R2(obs, sim):
     
     
 def RMSE(obs, sim):
-    '''
-    Root mean square error
-    '''
+    """
+    Root mean squared error
+
+    Reference: https://en.wikipedia.org/wiki/Root-mean-square_deviation
+
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+    
+    Returns:
+        rmse (float): root mean squared error between observed and simulated values
+
+    """
     obs = obs.flatten()
     sim = sim.flatten()
     
@@ -65,26 +97,24 @@ def RMSE(obs, sim):
     
     
 def MAE(obs, sim):
-    '''
+    """
     Mean absolute error
-    '''
+
+    Reference: https://en.wikipedia.org/wiki/Mean_absolute_error
+
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+    
+    Returns:
+        mae (float): mean absolute error between observed and simulated values
+
+    """
     obs = obs.flatten()
     sim = sim.flatten()
     
     return np.mean(np.abs(sim - obs))
 
-
-def gof_metrics(obs, sim):
-    '''
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    '''
-    obs = obs.flatten()
-    sim = sim.flatten()
-    
-    return np.array( ( R(obs, sim), R2(obs, sim), RMSE(obs, sim), MAE(obs, sim) ) )
-
-####################################################################################
 ### Radar-specific classification metrics ###
 
 def prep_clf(obs, sim, threshold=0.1):
@@ -107,15 +137,7 @@ def prep_clf(obs, sim, threshold=0.1):
     return hits, misses, falsealarms, correctnegatives
 
 def CSI(obs, sim, threshold=0.1):
-    '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-    
+    """
     CSI - critical success index
     
     details in the paper: 
@@ -123,7 +145,15 @@ def CSI(obs, sim, threshold=0.1):
     Operational Application of Optical Flow Techniques to Radar-Based Rainfall Nowcasting. 
     Atmosphere, 8(3), 48. https://doi.org/10.3390/atmos8030048
     
-    '''
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
+    
+    Returns:
+        CSI (float): CSI value
+
+    """
     
     hits, misses, falsealarms, correctnegatives = prep_clf(obs=obs, sim=sim, threshold=threshold)
     
@@ -131,20 +161,20 @@ def CSI(obs, sim, threshold=0.1):
 
 def FAR(obs, sim, threshold=0.1):
     '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-
-    FAR - false alarm ratio
+    FAR - false alarm rate
    
     details in the paper: 
     Woo, W., & Wong, W. (2017). 
     Operational Application of Optical Flow Techniques to Radar-Based Rainfall Nowcasting. 
     Atmosphere, 8(3), 48. https://doi.org/10.3390/atmos8030048
+
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
+    
+    Returns:
+        FAR (float): FAR value
     
     '''
     hits, misses, falsealarms, correctnegatives = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -153,14 +183,6 @@ def FAR(obs, sim, threshold=0.1):
 
 def POD(obs, sim, threshold=0.1):
     '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-
     POD - probability of detection
    
     details in the paper: 
@@ -168,6 +190,14 @@ def POD(obs, sim, threshold=0.1):
     Operational Application of Optical Flow Techniques to Radar-Based Rainfall Nowcasting. 
     Atmosphere, 8(3), 48. https://doi.org/10.3390/atmos8030048
     
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
+    
+    Returns:
+        POD (float): POD value
+
     '''
     hits, misses, falsealarms, correctnegatives = prep_clf(obs=obs, sim=sim, threshold=threshold)
     
@@ -175,21 +205,21 @@ def POD(obs, sim, threshold=0.1):
 
 def HSS(obs, sim, threshold=0.1):
     '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-
     HSS - Heidke skill score
     
     details in the paper: 
     Woo, W., & Wong, W. (2017). 
     Operational Application of Optical Flow Techniques to Radar-Based Rainfall Nowcasting. 
     Atmosphere, 8(3), 48. https://doi.org/10.3390/atmos8030048
+
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
+    Returns:
+        HSS (float): HSS value
+
     '''
     hits, misses, falsealarms, correctnegatives = prep_clf(obs=obs, sim=sim, threshold=threshold)
     
@@ -200,19 +230,19 @@ def HSS(obs, sim, threshold=0.1):
 
 def ETS(obs, sim, threshold=0.1):
     '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-
     ETS - Equitable Threat Score
     details in the paper:
     Winterrath, T., & Rosenow, W. (2007). A new module for the tracking of radar-derived 
     precipitation with model-derived winds. Advances in Geosciences, 10, 77–83. https://doi.org/10.5194/adgeo-10-77-2007
     
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
+    
+    Returns:
+        ETS (float): ETS value
+
     '''
     hits, misses, falsealarms, correctnegatives = prep_clf(obs=obs, sim=sim, threshold=threshold)
     
@@ -225,18 +255,19 @@ def ETS(obs, sim, threshold=0.1):
 
 def BSS(obs, sim, threshold=0.1):
     '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-    
     BSS - Brier skill score
     
     details:
     https://en.wikipedia.org/wiki/Brier_score
+    
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
+    
+    Returns:
+        BSS (float): BSS value
+    
     '''
     obs = np.where(obs >= threshold, 1, 0)
     sim = np.where(sim  >= threshold, 1, 0)
@@ -246,53 +277,23 @@ def BSS(obs, sim, threshold=0.1):
     
     return np.sqrt(np.mean((obs - sim) ** 2))
     
-    
-def rad_metrics(obs, sim, threshold=0.1):
-    '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-    
-    CSI - critical success index
-    FAR - false alarm ratio
-    POD - probability of detection
-    HSS - Heidke skill score
-    
-    details in the paper: 
-    Woo, W., & Wong, W. (2017). 
-    Operational Application of Optical Flow Techniques to Radar-Based Rainfall Nowcasting. 
-    Atmosphere, 8(3), 48. https://doi.org/10.3390/atmos8030048
-    
-    '''
-
-    
-    return np.array(    (CSI(obs, sim, threshold=threshold), 
-                         FAR(obs, sim, threshold=threshold), 
-                         POD(obs, sim, threshold=threshold), 
-                         HSS(obs, sim, threshold=threshold)) )
-
-####################################################################################
 ### ML-specific classification metrics ###
 
 def ACC(obs, sim, threshold=0.1):
     '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-    
     ACC - accuracy score
     
     details:
     https://en.wikipedia.org/wiki/Accuracy_and_precision
     
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
+    
+    Returns:
+        ACC (float): accuracy value
+
     '''
     
     TP, FN, FP, TN = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -300,20 +301,20 @@ def ACC(obs, sim, threshold=0.1):
     return (TP + TN) / (TP + TN + FP + FN)
 
 def precision(obs, sim, threshold=0.1):
-    '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-    
+    '''  
     precision - precision score
     
     details:
     https://en.wikipedia.org/wiki/Information_retrieval#Precision
     
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
+    
+    Returns:
+        PRC (float): precision value
+
     '''
     
     TP, FN, FP, TN = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -321,20 +322,19 @@ def precision(obs, sim, threshold=0.1):
     return TP / (TP + FP)
 
 def recall(obs, sim, threshold=0.1):
-    '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-    
+    '''  
     recall - recall score
     
     details:
     https://en.wikipedia.org/wiki/Information_retrieval#Recall
     
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
+    
+    Returns:
+        REC (float): recall value
     '''
     
     TP, FN, FP, TN = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -343,19 +343,18 @@ def recall(obs, sim, threshold=0.1):
 
 def FSC(obs, sim, threshold=0.1):
     '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-    
     FSC - F-score
     
     details:
     https://en.wikipedia.org/wiki/F1_score
     
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
+    
+    Returns:
+        FSC (float): FSC value
     '''
     
     pre = precision(obs, sim, threshold=threshold)
@@ -364,20 +363,19 @@ def FSC(obs, sim, threshold=0.1):
     return 2 * ( (pre * rec) / (pre + rec) )
 
 def MCC(obs, sim, threshold=0.1):
-    '''
-    input:
-    
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    threshold - the threshold over that we consider rain falls
-    
-    output:
-    
+    '''    
     MCC - Matthews correlation coefficient
     
     details:
     https://en.wikipedia.org/wiki/Matthews_correlation_coefficient
     
+    Args:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
+    
+    Returns:
+        MCC (float): MCC value
     '''
     
     TP, FN, FP, TN = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -387,25 +385,24 @@ def MCC(obs, sim, threshold=0.1):
     
     return MCC_num / MCC_den
 
-###############################################################################
 ### Curves for plotting ###
 
 def ROC_curve(obs, sim, thresholds):
     '''
-    input:
+    ROC - Receiver operating characteristic curve coordinates
+
+    Reference: https://en.wikipedia.org/wiki/Receiver_operating_characteristic
     
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    thresholds - number of thresholds over which we consider rain falls
+    Args:
     
-    output:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        thresholds (list with floats): number of thresholds over which we consider rain falls
     
-    tpr - true positive rate according to selected thresholds (y axis on ROC)
-    fpr - false positive rate according to selected thresholds (x axis on ROC)
+    Returns:
     
-    details:
-    https://en.wikipedia.org/wiki/Receiver_operating_characteristic
-    
+        tpr (numpy.ndarray): true positive rate according to selected thresholds (y axis on ROC)
+        fpr (numpy.ndarray): false positive rate according to selected thresholds (x axis on ROC)  
     
     '''
     
@@ -424,21 +421,21 @@ def ROC_curve(obs, sim, thresholds):
 
 def PR_curve(obs, sim, thresholds):
     '''
-    input:
+    PRC - precision-recall curve coordinates
+
+    Reference: http://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html
     
-    observation - real image (2D numpy array)
-    simulation - predicted image (2D numpy array)
-    thresholds - number of thresholds over which we consider rain falls
+    Args:
     
-    output:
+        obs (numpy.ndarray): observations
+        sim (numpy.ndarray): simulations
+        thresholds (list with floats): number of thresholds over which we consider rain falls
     
-    pre - precision rate according to selected thresholds (y axis on PR)
-    rec - recall rate according to selected thresholds (x axis on PR)
+    Returns:
     
-    details:
-    http://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html
-    
-    
+        pre (numpy.ndarray): precision rate according to selected thresholds (y axis on PR)
+        rec (numpy.ndarray): recall rate according to selected thresholds (x axis on PR)
+      
     '''
     
     pre = []
@@ -453,14 +450,18 @@ def PR_curve(obs, sim, thresholds):
 
 def AUC(x, y):
     '''
-    input:
+    AUC - area under curve
     
-    x - array of one metric rate (1D)
-    y - array of another metric rate (1D)
+    Note: area under curve wich had been computed by standard trapezial method (np.trapz)
+
+    Args:
+
+        x (numpy.ndarray): array of one metric rate (1D)
+        y (numpy.ndarray): array of another metric rate (1D)
+        
+    Returns:
     
-    output:
-    
-    auc - area under curve wich had been computed by standard trapezial method (np.trapz)
+        auc (float) - area under curve
     
     '''
     

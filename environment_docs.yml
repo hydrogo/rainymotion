@@ -96,7 +96,6 @@ dependencies:
   - port-for==0.3.1
   - pygments==2.2.0
   - pyyaml==3.12
-  - rainymotion==0.1
   - recommonmark==0.4.0
   - requests==2.18.4
   - snowballstemmer==1.2.1
