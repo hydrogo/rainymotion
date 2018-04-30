@@ -1,5 +1,24 @@
 """
 Efficiency (goodness of fit) metrics for precipitation nowcasting
+=================================================================
+
+.. autosummary::
+   :nosignatures:
+   :toctree: generated/
+   
+   R
+   R2
+   RMSE
+   MAE
+   FAR
+   POD
+   CSI
+   ETS
+   HSS
+   BSS
+   FSC
+   MCC
+
 """
 
 from __future__ import absolute_import

@@ -1,0 +1,109 @@
+name: rainymotion-docs
+channels:
+- conda-forge
+- defaults
+dependencies:
+- blas=1.1=openblas
+- bzip2=1.0.6=1
+- cycler=0.10.0=py36_0
+- dask-core=0.17.2=py_0
+- dbus=1.11.0=0
+- decorator=4.3.0=py_0
+- expat=2.2.5=0
+- ffmpeg=3.2.4=3
+- fontconfig=2.13.0=0
+- freetype=2.8.1=0
+- giflib=5.1.4=0
+- graphite2=1.3.11=0
+- h5py=2.7.1=py36_2
+- hdf5=1.10.1=2
+- icu=58.2=0
+- imageio=2.3.0=py36_0
+- jasper=1.900.1=4
+- jpeg=9b=2
+- kiwisolver=1.0.1=py36_1
+- libiconv=1.15=0
+- libpng=1.6.34=0
+- libtiff=4.0.9=0
+- libuuid=1.0.3=1
+- libwebp=0.5.2=7
+- libxcb=1.13=0
+- libxml2=2.9.8=0
+- matplotlib=2.2.2=py36_1
+- networkx=2.1=py36_0
+- numpy=1.14.3=py36_blas_openblas_200
+- olefile=0.45.1=py36_0
+- openblas=0.2.20=7
+- opencv=3.4.1=py36_blas_openblas_200
+- pcre=8.41=1
+- pillow=5.1.0=py36_0
+- pixman=0.34.0=1
+- pyparsing=2.2.0=py36_0
+- pyqt=5.6.0=py36_5
+- python-dateutil=2.7.2=py_0
+- pytz=2018.4=py_0
+- pywavelets=0.5.2=py36_1
+- scikit-image=0.13.1=py36_0
+- scikit-learn=0.19.1=py36_blas_openblas_201
+- scipy=1.0.1=py36_blas_openblas_200
+- sip=4.18=py36_1
+- six=1.11.0=py36_1
+- toolz=0.9.0=py_0
+- tornado=5.0.2=py36_0
+- x264=20131218=0
+- xorg-libxau=1.0.8=3
+- xorg-libxdmcp=1.1.2=3
+- ca-certificates=2018.03.07=0
+- cairo=1.14.12=h77bcde2_0
+- certifi=2018.4.16=py36_0
+- glib=2.53.6=h5d9569c_2
+- gst-plugins-base=1.12.4=h33fb286_0
+- gstreamer=1.12.4=hb53b477_0
+- harfbuzz=1.7.6=hc5b324e_0
+- libedit=3.1=heed3624_0
+- libffi=3.2.1=hd88cf55_4
+- libgcc=7.2.0=h69d50b8_2
+- libgcc-ng=7.2.0=hdf63c60_3
+- libgfortran=3.0.0=1
+- libstdcxx-ng=7.2.0=hdf63c60_3
+- ncurses=6.0=h9df7e31_2
+- openssl=1.0.2o=h20670df_0
+- pip=9.0.3=py36_0
+- python=3.6.5=hc3d631a_1
+- qt=5.6.2=h974d657_12
+- readline=7.0=ha6073c6_4
+- setuptools=39.0.1=py36_0
+- sqlite=3.23.1=he433501_0
+- tk=8.6.7=hc745277_3
+- wheel=0.31.0=py36_0
+- xz=5.2.3=h5e939de_4
+- zlib=1.2.11=ha838bed_2
+- pip:
+  - alabaster==0.7.10
+  - argh==0.26.2
+  - babel==2.5.3
+  - chardet==3.0.4
+  - commonmark==0.5.4
+  - dask==0.17.2
+  - docutils==0.14
+  - idna==2.6
+  - imagesize==1.0.0
+  - jinja2==2.10
+  - livereload==2.5.1
+  - markupsafe==1.0
+  - packaging==17.1
+  - pathtools==0.1.2
+  - port-for==0.3.1
+  - pygments==2.2.0
+  - pyyaml==3.12
+  - rainymotion==0.1
+  - recommonmark==0.4.0
+  - requests==2.18.4
+  - snowballstemmer==1.2.1
+  - sphinx==1.7.4
+  - sphinx-autobuild==0.7.1
+  - sphinxcontrib-websupport==1.0.1
+  - urllib3==1.22
+  - watchdog==0.8.3
+prefix: /home/georgy/anaconda3/envs/rainymotion-docs
+

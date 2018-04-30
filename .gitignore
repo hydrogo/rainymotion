@@ -102,3 +102,8 @@ ENV/
 
 # VScode project settings 
 .vscode 
+
+# Build artefacts
+/build
+/rainymotion.egg-info
+/dist

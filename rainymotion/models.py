@@ -1,5 +1,18 @@
 """
 Optical flow models for radar-based precipitation nowcasting
+============================================================
+
+.. autosummary::
+   :nosignatures:
+   :toctree: generated/
+
+    Sparse
+    SparseSD
+    Dense
+    DenseRotation
+    EulerianPersistence
+
+
 """
 
 from __future__ import absolute_import
@@ -508,7 +521,7 @@ class DenseRotation:
 class EulerianPersistence:
     
     """
-    
+    Eulerian Persistence (Persistence) model
     """
     
     def __init__(self):
