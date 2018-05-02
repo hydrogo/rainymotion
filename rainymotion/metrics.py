@@ -42,7 +42,7 @@ def R(obs, sim):
         sim (numpy.ndarray): simulations
         
     Returns:
-        r (float): correlation coefficient between observed and simulated values
+        float: correlation coefficient between observed and simulated values
 
     """
     obs = obs.flatten()
@@ -62,7 +62,7 @@ def R2(obs, sim):
         sim (numpy.ndarray): simulations
     
     Returns:
-        r2 (float): coefficient of determination between observed and simulated values
+        float: coefficient of determination between observed and simulated values
     
     """
 
@@ -87,7 +87,7 @@ def RMSE(obs, sim):
         sim (numpy.ndarray): simulations
     
     Returns:
-        rmse (float): root mean squared error between observed and simulated values
+        float: root mean squared error between observed and simulated values
 
     """
     obs = obs.flatten()
@@ -107,7 +107,7 @@ def MAE(obs, sim):
         sim (numpy.ndarray): simulations
     
     Returns:
-        mae (float): mean absolute error between observed and simulated values
+        float: mean absolute error between observed and simulated values
 
     """
     obs = obs.flatten()
@@ -151,7 +151,7 @@ def CSI(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        CSI (float): CSI value
+        float: CSI value
 
     """
     
@@ -174,7 +174,7 @@ def FAR(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        FAR (float): FAR value
+        float: FAR value
     
     '''
     hits, misses, falsealarms, correctnegatives = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -196,7 +196,7 @@ def POD(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        POD (float): POD value
+        float: POD value
 
     '''
     hits, misses, falsealarms, correctnegatives = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -218,7 +218,7 @@ def HSS(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        HSS (float): HSS value
+        float: HSS value
 
     '''
     hits, misses, falsealarms, correctnegatives = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -241,7 +241,7 @@ def ETS(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        ETS (float): ETS value
+        float: ETS value
 
     '''
     hits, misses, falsealarms, correctnegatives = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -266,7 +266,7 @@ def BSS(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        BSS (float): BSS value
+        float: BSS value
     
     '''
     obs = np.where(obs >= threshold, 1, 0)
@@ -292,7 +292,7 @@ def ACC(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        ACC (float): accuracy value
+        float: accuracy value
 
     '''
     
@@ -313,7 +313,7 @@ def precision(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        PRC (float): precision value
+        float: precision value
 
     '''
     
@@ -334,7 +334,7 @@ def recall(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        REC (float): recall value
+        float: recall value
     '''
     
     TP, FN, FP, TN = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -354,7 +354,7 @@ def FSC(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        FSC (float): FSC value
+        float: FSC value
     '''
     
     pre = precision(obs, sim, threshold=threshold)
@@ -375,7 +375,7 @@ def MCC(obs, sim, threshold=0.1):
         threshold (float)  : threshold for rainfall values binaryzation (rain/no rain)
     
     Returns:
-        MCC (float): MCC value
+        float: MCC value
     '''
     
     TP, FN, FP, TN = prep_clf(obs=obs, sim=sim, threshold=threshold)
@@ -403,7 +403,7 @@ def ROC_curve(obs, sim, thresholds):
     
         tpr (numpy.ndarray): true positive rate according to selected thresholds (y axis on ROC)
         fpr (numpy.ndarray): false positive rate according to selected thresholds (x axis on ROC)  
-    
+
     '''
     
     tpr = []
@@ -461,7 +461,7 @@ def AUC(x, y):
         
     Returns:
     
-        auc (float) - area under curve
+        float - area under curve
     
     '''
     
