@@ -107,3 +107,6 @@ ENV/
 /build
 /rainymotion.egg-info
 /dist
+
+# Results
+/data/results.h5
