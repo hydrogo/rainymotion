@@ -19,13 +19,12 @@
 
 .. toctree::
    :maxdepth: 2
-   :caption: Precipitation nowcasting models:
+   :caption: Contents:
+   
    sparse
    sparsesd
    dense
    denserotation
-   
-   :caption: Library functions reference:
    models
    metrics
    utils

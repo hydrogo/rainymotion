@@ -7,7 +7,7 @@
    :toctree: generated/
 
     Scaler
-    invScaler
+    inv_Scaler
     
   
 """
