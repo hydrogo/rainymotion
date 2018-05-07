@@ -1,5 +1,15 @@
 """
-`rainymotion.preprocessing`: scaling data for optical flow
+``rainymotion.utils``: scaling data for optical flow based nowcasting models
+============================================================================
+
+.. autosummary::
+   :nosignatures:
+   :toctree: generated/
+
+    Scaler
+    invScaler
+    
+  
 """
 
 from __future__ import absolute_import
@@ -10,29 +20,38 @@ import numpy as np
 
 def Scaler(X_mmh):
     '''
-    transfer X from mm/h (raw data)
+    Transfer X from mm/h (raw data)
     to dBz values (the most suitable for optical tracking),
     and then convert them to [0, 255] interval
     for image tracking capability
     
-    X_mmh - mm/h
-    X_rfl - reflectivity
-    X_dbz - decibels
-    X_scl - decibels scaled to [0, 255]
+    Args:
+        X (numpy.ndarray): radar image of the rainfall intensity
+
+    Returns:
+        numpy.ndarray(uint8): brightness integer values from 0 to 255 for corresponding input rainfall intensity
+        float: minimum value of rainfall intensities in dBz
+        float: maximum value of rainfall intensities in dBz
+    
+    .. X_mmh - mm/h
+       X_rfl - reflectivity
+       X_dbz - decibels
+       X_scl - decibels scaled to [0, 255]
+    
     '''
     def mmh2rfl(r, a=256., b=1.42):
         '''
-        based on wradlib.zr.r2z function
+        .. based on wradlib.zr.r2z function
         
-        r --> z
+        .. r --> z
         '''
         return a * r ** b
     
     def rfl2dbz(z):
         '''
-        based on wradlib.trafo.decibel function
+        .. based on wradlib.trafo.decibel function
         
-        z --> d
+        .. z --> d
         '''
         return 10. * np.log10(z)
     
@@ -57,28 +76,36 @@ def Scaler(X_mmh):
 
 def inv_Scaler(X_scl, dbz_min, dbz_max):
     '''
-    Transfer X in [0, 255] to decibels,
-    then decibels to reflectivity,
-    then reflectivity to rainfall in mm/h
+    Transfer brightness integer value in uint8 [0, 255] to rainfall intensities in mm/h.
+    Function which is inverse to Scaler() function. 
+
+    Args:
+        X_scl (numpy.ndarray): array of brightness integers obtained from Scaler() function.
+        dbz_min: minimum value of rainfall intensities in dBz obtained from Scaler() function.
+        dbz_max: maximum value of rainfall intensities in dBz obtained from Scaler() function.
     
-    X_mmh - mm/h
-    X_rfl - reflectivity
-    X_dbz - decibels
-    X_scl - decibels scaled to [0, 255]
+    Returns:
+        numpy.ndarray(float): rainfall intensities in mm/h
+
+    .. X_mmh - mm/h
+       X_rfl - reflectivity
+       X_dbz - decibels
+       X_scl - decibels scaled to [0, 255]
+
     '''
     def dbz2rfl(d):
         '''
-        based on wradlib.trafo.idecibel function
+        .. based on wradlib.trafo.idecibel function
         
-        d --> z
+        .. d --> z
         '''
         return 10. ** (d / 10.)
     
     def rfl2mmh(z, a=256., b=1.42):
         '''
-        based on wradlib.zr.z2r function
+        .. based on wradlib.zr.z2r function
         
-        z --> r
+        .. z --> r
         '''
         return (z / a) ** (1. / b)
     

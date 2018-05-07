@@ -4,25 +4,31 @@
    contain the root `toctree` directive.
 
 
-rainymotion: Python library for radar-based precipitation nowcasting
-====================================================================
+``rainymotion``: Python library for radar-based precipitation nowcasting
+========================================================================
 
 :Release: |release|
 :Date: |today|
 
-`rainymotion` is a Python library utilizes different models for radar-based precipitation nowcasting based on the optical flow techniques.
+``rainymotion`` is a Python library utilizes different models for radar-based precipitation nowcasting based on the optical flow techniques.
 
-.. note:: Please cite `rainymotion` as *Ayzel, M., Heistermann M., and Winterrath T.: Optical flow models as a benchmark for radar-based precipitation nowcasting* (in preparation)
+.. note:: Please cite `rainymotion` as *Ayzel, G., Heistermann M., and Winterrath T.: Optical flow models as a benchmark for radar-based precipitation nowcasting* (in preparation)
 
-`rainymotion` also provides a bunch of statistical metrics for nowcasting models evaluation.
+``rainymotion`` also provides a bunch of statistical metrics for nowcasting models evaluation (module ``rainymotion.metrics``) and useful utils (module ``rainymotion.utils``) for radar data preprocessing.
+
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
-
+   :caption: Precipitation nowcasting models:
+   sparse
+   sparsesd
+   dense
+   denserotation
+   
+   :caption: Library functions reference:
    models
    metrics
-
+   utils
 
 
 Indices and tables

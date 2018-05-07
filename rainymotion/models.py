@@ -1,5 +1,5 @@
 """
-`rainymotion.models`: optical flow models for radar-based precipitation nowcasting
+``rainymotion.models``: optical flow models for radar-based precipitation nowcasting
 ==================================================================================
 
 Explicit model description in plain test (like in the paper)
