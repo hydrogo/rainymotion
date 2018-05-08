@@ -51,7 +51,9 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.mathjax', 
     'sphinx.ext.autosummary', 
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon', 
+    'nbsphinx',
+    'sphinx.ext.mathjax'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -76,7 +78,15 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = []
+exclude_patterns = ['_build', '**.ipynb_checkpoints']
+
+# -- nbsphinx specifics --
+
+# This allows sphinx-directives used within notebooks
+nbsphinx_allow_directives = True
+
+# do not execute notebooks ever while building docs
+nbsphinx_execute = 'never'
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'

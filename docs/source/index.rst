@@ -21,13 +21,9 @@
    :maxdepth: 2
    :caption: Contents:
    
-   sparse
-   sparsesd
-   dense
-   denserotation
-   models
-   metrics
-   utils
+   gettingstarted
+   notebooks
+   reference
 
 
 Indices and tables

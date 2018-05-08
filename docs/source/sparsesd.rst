@@ -1,2 +1,0 @@
-SparseSD model
-==============
