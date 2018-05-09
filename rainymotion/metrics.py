@@ -1,6 +1,6 @@
 """
 ``rainymotion.metrics``: efficiency (goodness of fit) metrics for precipitation nowcasting
-========================================================================================
+==========================================================================================
 
 We provide different goodness of fit metrics for nowcasting models' performance evaluation. 
 

@@ -1,6 +1,6 @@
 """
 ``rainymotion.models``: optical flow models for radar-based precipitation nowcasting
-==================================================================================
+====================================================================================
 
 Explicit model description in plain test (like in the paper)
 
@@ -8,11 +8,11 @@ Explicit model description in plain test (like in the paper)
    :nosignatures:
    :toctree: generated/
 
-    Sparse
-    SparseSD
-    Dense
-    DenseRotation
-    EulerianPersistence
+   Sparse
+   SparseSD
+   Dense
+   DenseRotation
+   EulerianPersistence
 
 
 """
@@ -33,89 +33,78 @@ class Sparse:
     """
     The basic class for the Sparse model implementation (the Sparse Group).
 
-    Methods
-    _______
-    run: run the model with the specified parameters (see *Parameters*)
+    **It is highly recommended to try the model with default parameters for first**
+
 
     Parameters
-    __________
-
-    For the standard worflow it is neccessary to specify only `input_data` parameter.
-
-
-    params: dictionary 
-        
+    ----------
+    params : dictionary 
         This dictionary holds parameters for identification and tracking relevant rain field features.
-        
+ 
         `params` dictionary has the folded structure: 
             * 'st_pars' key stores dictionary with the Shi-Tomasi's corner detection algorithm parameters 
             * 'lk_pars' key stores dictionary with the Lukas-Kanade's tracking algorithm parameters
 
-            Default `params` dict is:
-            params = {'st_pars' : dict(maxCorners = 200, 
-                           qualityLevel = 0.2, 
-                           minDistance = 7, 
-                           blockSize = 21 ),
-                       'lk_pars' : dict(winSize  = (20,20), 
-                           maxLevel = 2, 
-                           criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))
-                      }
-            where:
-                * for ['st_pars']:
-                    maxCorners       (default: 200; ranges: [50, 300];  type: int)  - maximum number of corners to return
-                    qualityLevel     (default: 0.2; ranges: [0.1, 0.7], type: float)- minimal accepted quality of image corners
-                    minDistance      (default: 7;   ranges: [3, 15],    type: int)  - minimum possible Euclidean distance between the returned corners
-                    blockSize        (default: 21;  ranges: [10, 50],   type: int)  - size of an average block for computing a derivative covariation matrix over each pixel neighborhood
-                * for ['lk_pars']:
-                    winSize          (default: 20;  ranges: [10, 30],   type: int)  - size of the search window at each pyramid level
-                    maxLevel         (default: 2;   ranges: [0, 4],     type: int)  - 0-based maximal pyramid level number
+        Default `params` dict is:
+        
+        ``params = {'st_pars' : dict(maxCorners = 200, qualityLevel = 0.2, minDistance = 7, blockSize = 21 ), 'lk_pars' : dict(winSize  = (20,20), maxLevel = 2, criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}``
+
+        where:
+            * for ['st_pars']:
+                + maxCorners       (default: 200; ranges: [50, 300];  type: int)  - maximum number of corners to return
+                + qualityLevel     (default: 0.2; ranges: [0.1, 0.7], type: float)- minimal accepted quality of image corners
+                + minDistance      (default: 7;   ranges: [3, 15],    type: int)  - minimum possible Euclidean distance between the returned corners
+                + blockSize        (default: 21;  ranges: [10, 50],   type: int)  - size of an average block for computing a derivative covariation matrix over each pixel neighborhood
+            * for ['lk_pars']:
+                + winSize          (default: 20;  ranges: [10, 30],   type: int)  - size of the search window at each pyramid level
+                + maxLevel         (default: 2;   ranges: [0, 4],     type: int)  - 0-based maximal pyramid level number
 
         You can find the extensive parameters description by the following links:
-        http://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html?highlight=goodfeaturestotrack#goodfeaturestotrack
-        http://docs.opencv.org/2.4/modules/video/doc/motion_analysis_and_object_tracking.html
-
-        It is highly recommended to try the model with default parameters for first
-
-    extrapolator: dictionary 
-        
+            * http://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html?highlight=goodfeaturestotrack#goodfeaturestotrack
+            * http://docs.opencv.org/2.4/modules/video/doc/motion_analysis_and_object_tracking.html
+    extrapolator : dictionary 
         This dictionary holds parameters used for precipitation field extrapolation.
 
         `extrapolator` dictionary has the following structure:
-            * `model` key stores the regression model instance from the scikit-learn library
-            * `features` key stores the key for regression model features representation.
+            * 'model' key stores the regression model instance from the scikit-learn library
+            * 'features' key stores the key for regression model features representation.
 
-            Default `extrapolator` dictionyry is:
-            extrapolator = {"model": LinearRegression(), "features": "ordinal"}
+        Default `extrapolator` dictionyry is:
+        
+        ``extrapolator = {"model": LinearRegression(), "features": "ordinal"}``
 
-            where: 
-                * model (default: LinearRegression()) - any regression model instance from sklearn library 
-                * features (default: "ordinal"; available: "polynomial") - key for features representation in the regression model
-
+        where:  
+            * model (default: LinearRegression()) - any regression model instance from sklearn library 
+            * features (default: "ordinal"; available: "polynomial") - key for features representation in the regression model
+    
     warper: string
-
         The parameter determines the variant of warping transformation.
 
         Default value: "affine"
+
         Available values: "euclidean", "similarity", "projective"
 
         For more information, please, follow the link: http://scikit-image.org/docs/dev/api/skimage.transform.html
 
     input_data: numpy.ndarray
-
         8-bit (uint8, 0-255) 3D numpy.ndarray (frames, dim_x, dim_y) of radar data for previous 2 hours (24 frames)
 
         Default value: None
 
     lead_steps: int
-
         The required lead steps of nowcasting
 
         Default value: 12
+    
+    Examples
+    --------
+    
+    See :ref:`/notebooks/sparse.ipynb`
 
+    See :ref:`/notebooks/nowcasting.ipynb`.
 
     """
     def __init__(self):
-        
                 
         self.params = {'st_pars' : dict(maxCorners = 200, 
                            qualityLevel = 0.2, 
@@ -141,6 +130,11 @@ class Sparse:
 
         For running with the default parameters only the input data instance is required (.input_data parameter).
 
+        Args:
+            None
+        
+        Returns:
+            numpy.ndarray: 3D numpy.ndarray of precipitation nowcasting (frames, dim_x, dim_y)
         """
         # check input data
         
@@ -263,85 +257,59 @@ class SparseSD:
     """
     The basic class for the SparseSD model implementation (the Sparse Group).
 
-    Methods
-    _______
-    run: run the model with the specified parameters (see *Parameters*)
+    **It is highly recommended to try the model with default parameters for first**
 
     Parameters
-    __________
-
-    For the standard worflow it is neccessary to specify only `input_data` parameter.
-
-
-    params: dictionary 
-        
+    ----------
+    params : dictionary 
         This dictionary holds parameters for identification and tracking relevant rain field features.
-        
+ 
         `params` dictionary has the folded structure: 
             * 'st_pars' key stores dictionary with the Shi-Tomasi's corner detection algorithm parameters 
             * 'lk_pars' key stores dictionary with the Lukas-Kanade's tracking algorithm parameters
 
-            Default `params` dict is:
-            params = {'st_pars' : dict(maxCorners = 200, 
-                           qualityLevel = 0.2, 
-                           minDistance = 7, 
-                           blockSize = 21 ),
-                       'lk_pars' : dict(winSize  = (20,20), 
-                           maxLevel = 2, 
-                           criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))
-                      }
-            where:
-                * for ['st_pars']:
-                    maxCorners       (default: 200; ranges: [50, 300];  type: int)  - maximum number of corners to return
-                    qualityLevel     (default: 0.2; ranges: [0.1, 0.7], type: float)- minimal accepted quality of image corners
-                    minDistance      (default: 7;   ranges: [3, 15],    type: int)  - minimum possible Euclidean distance between the returned corners
-                    blockSize        (default: 21;  ranges: [10, 50],   type: int)  - size of an average block for computing a derivative covariation matrix over each pixel neighborhood
-                * for ['lk_pars']:
-                    winSize          (default: 20;  ranges: [10, 30],   type: int)  - size of the search window at each pyramid level
-                    maxLevel         (default: 2;   ranges: [0, 4],     type: int)  - 0-based maximal pyramid level number
+        Default `params` dict is:
+        
+        ``params = {'st_pars' : dict(maxCorners = 200, qualityLevel = 0.2, minDistance = 7, blockSize = 21 ), 'lk_pars' : dict(winSize  = (20,20), maxLevel = 2, criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}``
+
+        where:
+            * for ['st_pars']:
+                + maxCorners       (default: 200; ranges: [50, 300];  type: int)  - maximum number of corners to return
+                + qualityLevel     (default: 0.2; ranges: [0.1, 0.7], type: float)- minimal accepted quality of image corners
+                + minDistance      (default: 7;   ranges: [3, 15],    type: int)  - minimum possible Euclidean distance between the returned corners
+                + blockSize        (default: 21;  ranges: [10, 50],   type: int)  - size of an average block for computing a derivative covariation matrix over each pixel neighborhood
+            * for ['lk_pars']:
+                + winSize          (default: 20;  ranges: [10, 30],   type: int)  - size of the search window at each pyramid level
+                + maxLevel         (default: 2;   ranges: [0, 4],     type: int)  - 0-based maximal pyramid level number
 
         You can find the extensive parameters description by the following links:
-        http://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html?highlight=goodfeaturestotrack#goodfeaturestotrack
-        http://docs.opencv.org/2.4/modules/video/doc/motion_analysis_and_object_tracking.html
-
-        It is highly recommended to try the model with default parameters for first
-
-    extrapolator: dictionary 
+            * http://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html?highlight=goodfeaturestotrack#goodfeaturestotrack
+            * http://docs.opencv.org/2.4/modules/video/doc/motion_analysis_and_object_tracking.html
         
-        This dictionary holds parameters used for precipitation field extrapolation.
-
-        `extrapolator` dictionary has the following structure:
-            * `model` key stores the regression model instance from the scikit-learn library
-            * `features` key stores the key for regression model features representation.
-
-            Default `extrapolator` dictionyry is:
-            extrapolator = {"model": LinearRegression(), "features": "ordinal"}
-
-            where: 
-                * model (default: LinearRegression()) - any regression model instance from sklearn library 
-                * features (default: "ordinal"; available: "polynomial") - key for features representation in the regression model
-
     warper: string
-
         The parameter determines the variant of warping transformation.
 
         Default value: "affine"
+
         Available values: "euclidean", "similarity", "projective"
 
         For more information, please, follow the link: http://scikit-image.org/docs/dev/api/skimage.transform.html
 
     input_data: numpy.ndarray
-
-        8-bit (uint8, 0-255) 3D numpy.ndarray (frames, dim_x, dim_y) of radar data for previous 10 minutes (2 frames)
+        8-bit (uint8, 0-255) 3D numpy.ndarray (frames, dim_x, dim_y) of radar data for previous 2 hours (24 frames)
 
         Default value: None
 
     lead_steps: int
-
         The required lead steps of nowcasting
 
         Default value: 12
-
+    
+    Examples
+    --------
+    
+    See :ref:`/notebooks/sparse.ipynb`
+    See :ref:`/notebooks/nowcasting.ipynb`.    
 
     """
 
@@ -366,7 +334,7 @@ class SparseSD:
     def run(self):
         
         """
-        The method for running the Sparse model with the parameters were specified in the Class parameters.
+        The method for running the SparseSD model with the parameters were specified in the Class parameters.
 
         For running with the default parameters only the input data instance is required (.input_data parameter).
 
@@ -645,7 +613,6 @@ class DenseRotation:
 
     """
     def __init__(self):
-        
                
         self.params = {'farneback_param': dict(pyr_scale = 0.5, 
                                                levels = 3, 
