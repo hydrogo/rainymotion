@@ -5,16 +5,9 @@ rainymotion.models.DenseRotation
 
 .. autoclass:: DenseRotation
 
-   
-   .. automethod:: __init__
-
-   
    .. rubric:: Methods
-
-   .. autosummary::
    
-      ~DenseRotation.__init__
-      ~DenseRotation.run
+   .. automethod:: run
    
    
 

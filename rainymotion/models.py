@@ -126,7 +126,7 @@ class Sparse:
     def run(self):
         
         """
-        The method for running the Sparse model with the parameters were specified in the Class parameters.
+        The method for running the Sparse model with the parameters were specified in the Sparse class parameters.
 
         For running with the default parameters only the input data instance is required (.input_data parameter).
 
@@ -309,6 +309,7 @@ class SparseSD:
     --------
     
     See :ref:`/notebooks/sparse.ipynb`
+
     See :ref:`/notebooks/nowcasting.ipynb`.    
 
     """
@@ -334,10 +335,16 @@ class SparseSD:
     def run(self):
         
         """
-        The method for running the SparseSD model with the parameters were specified in the Class parameters.
+        The method for running the SparseSD model with the parameters were specified in the SparseSD class parameters.
 
         For running with the default parameters only the input data instance is required (.input_data parameter).
 
+        Args:
+            None
+        
+        Returns:
+            numpy.ndarray: 3D numpy.ndarray of precipitation nowcasting (frames, dim_x, dim_y)
+        
         """
         # check input data
         
@@ -414,64 +421,59 @@ class SparseSD:
 class Dense:
     """
     The basic class for the Dense model implementation (the Dense Group).
-
-    Methods
-    _______
-    run: run the model with the specified parameters (see *Parameters*)
-
+    
+    **It is highly recommended to try the model with default parameters for first**
+    
     Parameters
-    __________
-
-    For the standard worflow it is neccessary to specify only `input_data` parameter.
+    ----------
 
     params: dictionary 
-        
         This dictionary holds parameters for the Farnerbacks's optical flow algorithm.
         
-        `params` dictionary has the folded structure:
-            *  'farneback_param' key stores the dictionary with the Farnerback's optical flow parameters.
+        `params` dictionary has the following structure:
+            * 'farneback_param' key stores the dictionary with the Farnerback's optical flow parameters.
 
-            Default `params` dict is:
-            params = {'farneback_param': dict(pyr_scale = 0.5, 
-                                               levels = 3, 
-                                               winsize = 15, 
-                                               iterations = 3, 
-                                               poly_n = 5, 
-                                               poly_sigma = 1.1, 
-                                               flags = 0)
-                      }
-            where:
-                * for ['farneback_param']:
-                    pyr_scale  (default: 0.5; ranges: [0.1, 0.9]; type: float) - image scale to build pyramids
-                    levels     (default: 3;   ranges: [1, 7],     type: int)   - number of pyramid layers
-                    winsize    (default: 15;  ranges: [5, 30],    type: int)   - averaging window size
-                    iterations (default: 3;   ranges: [2, 10],    type: int)   - number of iterations at each pyramid level
-                    poly_n     (default: 5;   ranges: [3, 10],    type: int)   - size of the pixel neighborhood
-                    poly_sigma (default: 1.1; ranges: [0.9, 2],   type: float) - std of the Gaussian for smoothing derivatives
+        Default `params` dict is:
+        
+        ``params = {'farneback_param': dict(pyr_scale = 0.5, levels = 3, winsize = 15, iterations = 3, poly_n = 5, poly_sigma = 1.1, flags = 0)}``
+        
+        where:
+            * for ['farneback_param']:
+                + pyr_scale  (default: 0.5; ranges: [0.1, 0.9]; type: float) - image scale to build pyramids
+                + levels     (default: 3;   ranges: [1, 7],     type: int)   - number of pyramid layers
+                + winsize    (default: 15;  ranges: [5, 30],    type: int)   - averaging window size
+                + iterations (default: 3;   ranges: [2, 10],    type: int)   - number of iterations at each pyramid level
+                + poly_n     (default: 5;   ranges: [3, 10],    type: int)   - size of the pixel neighborhood
+                + poly_sigma (default: 1.1; ranges: [0.9, 2],   type: float) - std of the Gaussian for smoothing derivatives
 
         You can find the extensive parameters description by the following link:
-        http://docs.opencv.org/2.4/modules/video/doc/motion_analysis_and_object_tracking.html#calcopticalflowfarneback
-
-        It is highly recommended to try the model with default parameters for first
+            * http://docs.opencv.org/2.4/modules/video/doc/motion_analysis_and_object_tracking.html#calcopticalflowfarneback
 
     input_data: numpy.ndarray
-
         8-bit (uint8, 0-255) 3D numpy.ndarray (frames, dim_x, dim_y) of radar data for previous 10 minutes (2 frames)
 
         Default value: None
 
     lead_steps: int
-
         The required lead steps of nowcasting
 
         Default value: 12
     
     interpolator: string
-
+        Interpolation technique.
+        
         Default: "linear"
+
         Available: "nearest", "cubic"
 
         For details see: https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.griddata.html
+
+    Examples
+    --------
+    
+    See :ref:`/notebooks/dense.ipynb`
+    
+    See :ref:`/notebooks/nowcasting.ipynb`.
 
     """
 
@@ -496,9 +498,16 @@ class Dense:
     def run(self):
         
         """
-        The method for running the Sparse model with the parameters were specified in the Class parameters.
+        The method for running the Sparse model with the parameters were specified in the Dense class parameters.
 
         For running with the default parameters only the input data instance is required (.input_data parameter).
+
+        Args:
+            None
+        
+        Returns:
+            numpy.ndarray: 3D numpy.ndarray of precipitation nowcasting (frames, dim_x, dim_y)
+
         """
         # check input data
         if not isinstance(self.input_data, np.ndarray) \
@@ -551,66 +560,60 @@ class Dense:
     
 class DenseRotation:
     """
-    The basic class for the DenseRotation model implementation (the Dense Group).
-
-    Methods
-    _______
-    run: run the model with the specified parameters (see *Parameters*)
-
+    The basic class for the Dense model implementation (the Dense Group).
+    
+    **It is highly recommended to try the model with default parameters for first**
+    
     Parameters
-    __________
-
-    For the standard worflow it is neccessary to specify only `input_data` parameter.
+    ----------
 
     params: dictionary 
-        
         This dictionary holds parameters for the Farnerbacks's optical flow algorithm.
         
-        `params` dictionary has the folded structure:
-            *  'farneback_param' key stores the dictionary with the Farnerback's optical flow parameters.
+        `params` dictionary has the following structure:
+            * 'farneback_param' key stores the dictionary with the Farnerback's optical flow parameters.
 
-            Default `params` dict is:
-            params = {'farneback_param': dict(pyr_scale = 0.5, 
-                                               levels = 3, 
-                                               winsize = 15, 
-                                               iterations = 3, 
-                                               poly_n = 5, 
-                                               poly_sigma = 1.1, 
-                                               flags = 0)
-                      }
-            where:
-                * for ['farneback_param']:
-                    pyr_scale  (default: 0.5; ranges: [0.1, 0.9]; type: float) - image scale to build pyramids
-                    levels     (default: 3;   ranges: [1, 7],     type: int)   - number of pyramid layers
-                    winsize    (default: 15;  ranges: [5, 30],    type: int)   - averaging window size
-                    iterations (default: 3;   ranges: [2, 10],    type: int)   - number of iterations at each pyramid level
-                    poly_n     (default: 5;   ranges: [3, 10],    type: int)   - size of the pixel neighborhood
-                    poly_sigma (default: 1.1; ranges: [0.9, 2],   type: float) - std of the Gaussian for smoothing derivatives
+        Default `params` dict is:
+        
+        ``params = {'farneback_param': dict(pyr_scale = 0.5, levels = 3, winsize = 15, iterations = 3, poly_n = 5, poly_sigma = 1.1, flags = 0)}``
+        
+        where:
+            * for ['farneback_param']:
+                + pyr_scale  (default: 0.5; ranges: [0.1, 0.9]; type: float) - image scale to build pyramids
+                + levels     (default: 3;   ranges: [1, 7],     type: int)   - number of pyramid layers
+                + winsize    (default: 15;  ranges: [5, 30],    type: int)   - averaging window size
+                + iterations (default: 3;   ranges: [2, 10],    type: int)   - number of iterations at each pyramid level
+                + poly_n     (default: 5;   ranges: [3, 10],    type: int)   - size of the pixel neighborhood
+                + poly_sigma (default: 1.1; ranges: [0.9, 2],   type: float) - std of the Gaussian for smoothing derivatives
 
         You can find the extensive parameters description by the following link:
-        http://docs.opencv.org/2.4/modules/video/doc/motion_analysis_and_object_tracking.html#calcopticalflowfarneback
-
-        It is highly recommended to try the model with default parameters for first
+            * http://docs.opencv.org/2.4/modules/video/doc/motion_analysis_and_object_tracking.html#calcopticalflowfarneback
 
     input_data: numpy.ndarray
-
         8-bit (uint8, 0-255) 3D numpy.ndarray (frames, dim_x, dim_y) of radar data for previous 10 minutes (2 frames)
 
         Default value: None
 
     lead_steps: int
-
         The required lead steps of nowcasting
 
         Default value: 12
     
     interpolator: string
-
+        Interpolation technique.
+        
         Default: "linear"
+
         Available: "nearest", "cubic"
 
         For details see: https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.griddata.html
 
+    Examples
+    --------
+    
+    See :ref:`/notebooks/dense.ipynb`
+    
+    See :ref:`/notebooks/nowcasting.ipynb`.
     """
     def __init__(self):
                
@@ -632,9 +635,16 @@ class DenseRotation:
     def run(self):
         
         """
-        The method for running the Sparse model with the parameters were specified in the Class parameters.
+        The method for running the Sparse model with the parameters were specified in the DenseRotation class parameters.
 
         For running with the default parameters only the input data instance is required (.input_data parameter).
+
+        Args:
+            None
+        
+        Returns:
+            numpy.ndarray: 3D numpy.ndarray of precipitation nowcasting (frames, dim_x, dim_y)
+
         """
         # check input data
         if not isinstance(self.input_data, np.ndarray) \
@@ -696,26 +706,23 @@ class EulerianPersistence:
     """
     The basic class for the Eulerian Persistence (Persistence) model implementation (weak baseline solution).
 
-    Methods
-    _______
-    run: run the model with the specified parameters (see *Parameters*)
-
     Parameters
-    __________
-
-    For the standard worflow it is neccessary to specify only `input_data` parameter.
+    ----------
 
     input_data: numpy.ndarray
-
         8-bit (uint8, 0-255) 3D numpy.ndarray (frames, dim_x, dim_y) of radar data for previous 10 minutes (2 frames)
 
         Default value: None
 
     lead_steps: int
-
         The required lead steps of nowcasting
 
         Default value: 12
+    
+    Examples
+    --------
+    
+    See :ref:`/notebooks/nowcasting.ipynb`.
     """
     
     def __init__(self):
@@ -726,9 +733,15 @@ class EulerianPersistence:
     
     def run(self):
         '''
-        The method for running the Sparse model with the parameters were specified in the Class parameters.
+        The method for running the Sparse model with the parameters were specified in the EulerianPersistence class parameters.
 
         For running with the default parameters only the input data instance is required (.input_data parameter).
+
+        Args:
+            None
+        
+        Returns:
+            numpy.ndarray: 3D numpy.ndarray of precipitation nowcasting (frames, dim_x, dim_y)
         '''
 
         last_frame = self.input_data[-1, :, :]
