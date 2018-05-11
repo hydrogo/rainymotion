@@ -6,6 +6,8 @@
    :nosignatures:
    :toctree: generated/
 
+    depth2intensity
+    intensity2depth
     Scaler
     inv_Scaler
     
@@ -18,26 +20,58 @@ from __future__ import print_function
 
 import numpy as np
 
-def Scaler(X_mmh):
-    '''
-    Transfer X from mm/h (raw data)
-    to dBz values (the most suitable for optical tracking),
-    and then convert them to [0, 255] interval
-    for image tracking capability
+def depth2intensity(depth, interval=300):
+    """
+    Function for convertion rainfall depth (in mm) to
+    rainfall intensity (mm/h)
     
     Args:
-        X (numpy.ndarray): radar image of the rainfall intensity
+        depth: float
+        float or array of float
+        rainfall depth (mm)
+        
+        interval : number
+        time interval (in sec) which is correspondend to depth values
+        
+    Returns:
+        intensity: float
+        float or array of float
+        rainfall intensity (mm/h)
+    """
+    return depth * 3600 / interval
+
+def intensity2depth(intensity, interval=300):
+    """
+    Function for convertion rainfall intensity (mm/h) to
+    rainfall depth (in mm)
+    
+    Args:
+        intensity: float
+        float or array of float
+        rainfall intensity (mm/h)
+                
+        interval : number
+        time interval (in sec) which is correspondend to depth values
+        
+    Returns:
+        depth: float
+        float or array of float
+        rainfall depth (mm)
+    """
+    return intensity * interval / 3600
+
+def RYScaler(X):
+    '''
+    Scale RY data from mm (in float64) to brightness (in uint8).
+    
+    Args:
+        X (numpy.ndarray): RY radar image
 
     Returns:
         numpy.ndarray(uint8): brightness integer values from 0 to 255 for corresponding input rainfall intensity
-        float: minimum value of rainfall intensities in dBz
-        float: maximum value of rainfall intensities in dBz
-    
-    .. X_mmh - mm/h
-       X_rfl - reflectivity
-       X_dbz - decibels
-       X_scl - decibels scaled to [0, 255]
-    
+        float: c1, scaling coefficient
+        float: c2, scaling coefficient
+        
     '''
     def mmh2rfl(r, a=256., b=1.42):
         '''
@@ -55,42 +89,34 @@ def Scaler(X_mmh):
         '''
         return 10. * np.log10(z)
     
-    # mmh to reflectivity
-    X_rfl = mmh2rfl(X_mmh)
+    # mm to reflectivity
+    X_rfl = mmh2rfl(X)
     # remove zero reflectivity
     # then log10(0.1) = -1 not inf (numpy warning arised)
     X_rfl[X_rfl == 0] = 0.1
     # reflectivity to dBz
     X_dbz = rfl2dbz(X_rfl)
-    #X_dbz = rfl2dbz(mmh2rfl(X_mmh)) # first version with warning arised
     # remove all -inf
     X_dbz[X_dbz < 0] = 0
 
     # MinMaxScaling
-    dbz_min = X_dbz.min()
-    dbz_max = X_dbz.max()
+    c1 = X_dbz.min()
+    c2 = X_dbz.max()
 
-    #X_scl = ( (X_dbz - dbz_min) / (dbz_max - dbz_min) * 255 ).astype(np.uint8)
+    return ( (X_dbz - c1) / (c2 - c1) * 255 ).astype(np.uint8), c1, c2
 
-    return ( (X_dbz - dbz_min) / (dbz_max - dbz_min) * 255 ).astype(np.uint8), dbz_min, dbz_max
-
-def inv_Scaler(X_scl, dbz_min, dbz_max):
+def inv_RYScaler(X_scl, c1, c2):
     '''
-    Transfer brightness integer value in uint8 [0, 255] to rainfall intensities in mm/h.
+    Transfer brightness (in uint8) to RY data (in mm).
     Function which is inverse to Scaler() function. 
 
     Args:
         X_scl (numpy.ndarray): array of brightness integers obtained from Scaler() function.
-        dbz_min: minimum value of rainfall intensities in dBz obtained from Scaler() function.
-        dbz_max: maximum value of rainfall intensities in dBz obtained from Scaler() function.
+        c1: first scaling coefficient obtained from Scaler() function.
+        c2: second scaling coefficient obtained from Scaler() function.
     
     Returns:
-        numpy.ndarray(float): rainfall intensities in mm/h
-
-    .. X_mmh - mm/h
-       X_rfl - reflectivity
-       X_dbz - decibels
-       X_scl - decibels scaled to [0, 255]
+        numpy.ndarray(float): RY radar image
 
     '''
     def dbz2rfl(d):
@@ -109,13 +135,11 @@ def inv_Scaler(X_scl, dbz_min, dbz_max):
         '''
         return (z / a) ** (1. / b)
     
-    # [0, 255] to decibels
-    #X_dbz = (X_scl / 255)*(dbz_max - dbz_min) + dbz_min
     # decibels to reflectivity
-    X_rfl = dbz2rfl((X_scl / 255)*(dbz_max - dbz_min) + dbz_min)
-    # the truth is that 0 dBz are 0 reflectivity, not 1
+    X_rfl = dbz2rfl((X_scl / 255)*(c2 - c1) + c1)
+    # 0 dBz are 0 reflectivity, not 1
     X_rfl[X_rfl == 1] = 0
-    # reflectivity to rainfall in mm/h
+    # reflectivity to rainfall in mm
     X_mmh = rfl2mmh(X_rfl)
     
     return X_mmh
