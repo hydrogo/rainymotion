@@ -60,7 +60,7 @@ def intensity2depth(intensity, interval=300):
     """
     return intensity * interval / 3600
 
-def RYScaler(X):
+def RYScaler(X_mm):
     '''
     Scale RY data from mm (in float64) to brightness (in uint8).
     
@@ -89,8 +89,10 @@ def RYScaler(X):
         '''
         return 10. * np.log10(z)
     
-    # mm to reflectivity
-    X_rfl = mmh2rfl(X)
+    # mm to mm/h
+    X_mmh = depth2intensity(X_mm)
+    # mm/h to reflectivity
+    X_rfl = mmh2rfl(X_mmh)
     # remove zero reflectivity
     # then log10(0.1) = -1 not inf (numpy warning arised)
     X_rfl[X_rfl == 0] = 0.1
@@ -139,7 +141,9 @@ def inv_RYScaler(X_scl, c1, c2):
     X_rfl = dbz2rfl((X_scl / 255)*(c2 - c1) + c1)
     # 0 dBz are 0 reflectivity, not 1
     X_rfl[X_rfl == 1] = 0
-    # reflectivity to rainfall in mm
+    # reflectivity to rainfall in mm/h
     X_mmh = rfl2mmh(X_rfl)
-    
-    return X_mmh
+    # intensity in mm/h to depth in mm
+    X_mm = intensity2depth(X_mmh)
+
+    return X_mm
