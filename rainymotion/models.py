@@ -498,7 +498,7 @@ class Dense:
     def run(self):
         
         """
-        The method for running the Sparse model with the parameters were specified in the Dense class parameters.
+        The method for running the model with the parameters were specified in the Dense class parameters.
 
         For running with the default parameters only the input data instance is required (.input_data parameter).
 
@@ -560,7 +560,7 @@ class Dense:
     
 class DenseRotation:
     """
-    The basic class for the Dense model implementation (the Dense Group).
+    The basic class for the DenseRotation model implementation (the Dense Group).
     
     **It is highly recommended to try the model with default parameters for first**
     
@@ -635,7 +635,7 @@ class DenseRotation:
     def run(self):
         
         """
-        The method for running the Sparse model with the parameters were specified in the DenseRotation class parameters.
+        The method for running the model with the parameters were specified in the DenseRotation class parameters.
 
         For running with the default parameters only the input data instance is required (.input_data parameter).
 
@@ -663,21 +663,61 @@ class DenseRotation:
         delta_x = delta[::, ::, 0]
         delta_y = delta[::, ::, 1]
         
+        #print(delta_x.shape, delta_y.shape)
+        
+        # rows, cols
+        rows = last_frame.shape[0]
+        cols = last_frame.shape[1]
+        
         # make a source meshgrid
-        coord_source_i, coord_source_j = np.meshgrid(range(last_frame.shape[0]), range(last_frame.shape[1]))
+        coord_source_i, coord_source_j = np.meshgrid(range(rows), range(cols))
+        coord_source = np.vstack([coord_source_i.ravel(), coord_source_j.ravel()]).T
         
-        # calculate target coordinats OF MESH only once
-        coord_target_i = coord_source_i + delta_x
-        coord_target_j = coord_source_j + delta_y
+        # make a source meshgrids for deltas
+        #delta_x_source = coord_source.copy()
+        #delta_y_source = coord_source.copy()
         
-        # propagate our image through time based on dense flow
-        # container for our nowcasts
-        nowcst_frames = []
+        # Create a KDTree for deltas
+        kdtree = spatial.cKDTree(coord_source, leafsize=8)
+        
+        #print(tree_x.data)
+               
+        # Block for calculation displacement
+        # init placeholders
+        coord_targets = []
         
         for lead_step in range(self.lead_steps):       
             
-            # we suppose that old values just go to the new locations (Lagrangian persistense)
-            # but we need to regrid data
+            # find indexes to match source coordinates with displacements
+            nearest_indexes = kdtree.query(coord_source)[1]
+                       
+            # based on corresponding indexes find the displacements values
+            corresponding_delta_x = delta_x.ravel()[nearest_indexes].reshape(rows, cols)
+            corresponding_delta_y = delta_y.ravel()[nearest_indexes].reshape(rows, cols)
+            
+            # calculate corresponding targets
+            coord_target_i = coord_source_i + corresponding_delta_x
+            coord_target_j = coord_source_j + corresponding_delta_y
+            
+            coord_targets.append([coord_target_i, coord_target_j])
+            
+            # now update source coordinates
+            coord_source_i = coord_target_i
+            coord_source_j = coord_target_j
+            coord_source = np.vstack([coord_source_i.ravel(), coord_source_j.ravel()]).T
+            
+        # Block for calculation nowcasts
+        # Need to create coordinate sources from scratch
+        coord_source_i, coord_source_j = np.meshgrid(range(rows), range(cols))
+        
+        # container for our nowcasts
+        nowcst_frames = []
+        
+        for lead_step in range(self.lead_steps):
+            
+            # unpack our target coordinates
+            coord_target_i, coord_target_j = coord_targets[lead_step]
+            
             # and with this implementation WE CONSIDER ROTATION
             nowcst_frame = griddata((coord_target_i.flatten(), coord_target_j.flatten()), 
                                     last_frame.flatten(), 
@@ -692,12 +732,7 @@ class DenseRotation:
             
             # add to the container
             nowcst_frames.append(nowcst_frame)
-            
-            # and now the nowcast frame became an a last frame
-            # and in the another iteration it will go through
-            # the same flow vectors
-            last_frame = nowcst_frame.copy()
-        
+                    
         return np.moveaxis(np.dstack(nowcst_frames), -1, 0).copy()
 
 ##### PERSISTENCE #####
