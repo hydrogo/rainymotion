@@ -24,6 +24,7 @@ from __future__ import print_function
 import cv2
 import numpy as np
 from scipy.interpolate import griddata
+from scipy import spatial
 import skimage.transform as sktf
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
