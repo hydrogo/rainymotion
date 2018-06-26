@@ -5,9 +5,16 @@ rainymotion.models.EulerianPersistence
 
 .. autoclass:: EulerianPersistence
 
-   .. rubric:: Methods
    
-   .. automethod:: run
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~EulerianPersistence.__init__
+      ~EulerianPersistence.run
    
    
 

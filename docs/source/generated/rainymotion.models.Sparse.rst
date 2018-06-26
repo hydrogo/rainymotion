@@ -4,10 +4,18 @@ rainymotion.models.Sparse
 .. currentmodule:: rainymotion.models
 
 .. autoclass:: Sparse
- 
-   .. rubric:: Methods
+
    
-   .. automethod:: run   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Sparse.__init__
+      ~Sparse.run
+   
    
 
    

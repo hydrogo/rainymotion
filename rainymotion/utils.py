@@ -8,8 +8,8 @@
 
     depth2intensity
     intensity2depth
-    Scaler
-    inv_Scaler
+    RYScaler
+    inv_RYScaler
     
   
 """

@@ -17,9 +17,6 @@ docs$ make html
 For updating and re-building:
 docs$ sphinx-autobuild source/ build/html
 
-To make my notebooks folder in root be available in docs: https://github.com/sphinx-doc/sphinx/issues/701
-docs/source$ ln -s ../../notebooks notebooks
-
 Environment installation
 1. conda env create -f environment_docs.yml
 2. python setup.py install 

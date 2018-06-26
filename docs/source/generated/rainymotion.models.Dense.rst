@@ -5,9 +5,16 @@ rainymotion.models.Dense
 
 .. autoclass:: Dense
 
-   .. rubric:: Methods
    
-   .. automethod:: run
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Dense.__init__
+      ~Dense.run
    
    
 
