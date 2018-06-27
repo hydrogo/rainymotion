@@ -20,7 +20,11 @@ The main idea of the `rainymotion` library is to provide an open baseline soluti
 
 ## Example
 
-To obtain precipitation nowcasts using the `rainymotion` models you need only radar data -- we already selected default parameters, so you need only to run them!
+To obtain precipitation nowcasts using the `rainymotion` models you need to follow the only three steps: 
+
+1. initialize the model (you have 4 variants)
+2. load data to the model's placeholder
+3. run the model
 
 ```python
 # import rainymotion model
@@ -35,4 +39,3 @@ model.input_data = DataLoader("/path/to/data")
 # run the model
 nowcasts = model.run()
 ```
-
