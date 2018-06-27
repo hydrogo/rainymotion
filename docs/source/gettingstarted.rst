@@ -24,7 +24,7 @@ For users familiar with a command line and ``git`` there is the easier way to do
 
     git clone https://github.com/hydrogo/rainymotion.git
 
-**Set up Python environment.** It is pretty common thing in software installation that something went wrong and not only installation process failed, but other software has beeb corrupted too. To avoid such a headacke, it is better to use isolated python environments. To create one, you need to enter the main ``rainymotion`` directory, run a command line from there, and then run: 
+**Set up Python environment.** It is pretty common thing in software installation that something went wrong and not only installation process failed, but other software has beeb corrupted too. To avoid such a headache, it is better to use isolated python environments. To create one, you need to enter the main ``rainymotion`` directory, run a command line from there, and then run: 
 
 .. code-block:: bash
 
@@ -40,7 +40,7 @@ The command above creates the isolated python environment *rainymotion* which ca
     # on Windows
     activate rainymotion
 
-To come back to normal life without Python and radar-based precpitation nowcasting, in your command line run:
+To come back to normal life without Python and radar-based precipitation nowcasting, in your command line run:
 
 .. code-block:: bash
 
@@ -58,7 +58,7 @@ To come back to normal life without Python and radar-based precpitation nowcasti
 
 Well done! You have (probably) installed the ``rainymotion`` library.
 
-**Check the installation.** To be sure that installation process had been correctly finalyzed, in your command line run:
+**Check the installation.** To be sure that installation process had been correctly finalized, in your command line run:
 
 .. code-block:: bash
 
@@ -68,7 +68,7 @@ Well done! You have (probably) installed the ``rainymotion`` library.
     # 2. import rainymotion
     >>>import rainymotion
 
-If no error is raised: good job, now you have a working python environment with the ``rainymotion`` library inside. You are ready to nowcast someting. 
+If no error is raised: good job, now you have a working python environment with the ``rainymotion`` library inside. You are ready to nowcast something. 
 
 Quick overview
 --------------
