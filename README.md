@@ -16,7 +16,7 @@ The main idea of the `rainymotion` library is to provide an open baseline soluti
 
 ## Documentation
 
-[correct link to docs](example.com)
+`rainymotion` [documentation](http://rainymotion.readthedocs.io) is hosted by [Read the Docs](https://readthedocs.org/).
 
 ## Example
 
