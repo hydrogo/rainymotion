@@ -14,7 +14,7 @@
 
 You can find the ``rainymotion`` source code in the corresponding `Github repository <https://github.com/hydrogo/rainymotion>`_. 
 
-.. note:: Please, `contact us <mailto:ayzel@uni_potsdam.de>`_ in case you would like to cite ``rainymotion`` in your work -- we will provide you an appropriate reference. 
+.. note:: Please cite ``rainymotion`` as  *Ayzel, G., Heistermann, M., and Winterrath, T.: Optical flow models as an open benchmark for radar-based precipitation nowcasting (rainymotion v0.1), Geosci. Model Dev. Discuss., https://doi.org/10.5194/gmd-2018-166, in review, 2018.* 
 
 ``rainymotion`` also provides a bunch of statistical metrics for nowcasting models evaluation (module ``rainymotion.metrics``) and useful utils (module ``rainymotion.utils``) for radar data preprocessing.
 

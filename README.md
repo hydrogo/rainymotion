@@ -39,3 +39,7 @@ model.input_data = DataLoader("/path/to/data")
 # run the model
 nowcasts = model.run()
 ```
+
+## Reference
+
+Please cite `rainymotion` as _Ayzel, G., Heistermann, M., and Winterrath, T.: Optical flow models as an open benchmark for radar-based precipitation nowcasting (rainymotion v0.1), Geosci. Model Dev. Discuss., https://doi.org/10.5194/gmd-2018-166, in review, 2018._
