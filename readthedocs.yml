@@ -1,5 +1,7 @@
-conda:
-    file: environment_rtd.yml
+requirements_file: requirements.txt
+
+# conda:
+#    file: environment_rtd.yml
 
 python:
     use_system_site_packages: true
