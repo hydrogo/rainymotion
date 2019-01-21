@@ -14,8 +14,8 @@ Installation process consists of multiple (but simple) **steps**:
 
 To download the source code as a .zip archive you have to go to the ``rainymotion`` `repository on the Github <https://github.com/hydrogo/rainymotion>`_ and press the green button "Clone or download". Then you can extract this archive to any folder on your computer.
 
-.. image:: notebooks/images/github_download.png
-   :target: notebooks/images/github_download.png
+.. image:: _static/github_download.png
+   :target: _static/github_download.png
 
 
 For users familiar with a command line and ``git`` there is the easier way to download the source code:
@@ -77,8 +77,8 @@ The main aim of the ``rainymotion`` library is to provide open and reliable mode
 
 ``rainymotion`` had not been writing from scratch. We incorporated the best open software solutions and provided a clue to make them work together.
 
-.. image:: notebooks/images/rainymotionisbasedonfoss.png
-   :target: notebooks/images/rainymotionisbasedonfoss.png
+.. image:: _static/rainymotionisbasedonfoss.png
+   :target: _static/images/rainymotionisbasedonfoss.png
 
 There are two general groups of models we provide for precipitation nowcasting: based on a local optical flow ( the Sparse group, and on a global optical flow (the Dense group).
 

@@ -18,19 +18,9 @@
 
 
 # -- Project information -----------------------------------------------------
-import os
-import sys
-import glob
-
-sys.path.insert(0, os.path.abspath('../../../'))
-sys.path.insert(0, os.path.abspath('../../'))
-sys.path.insert(0, os.path.abspath('../'))
-sys.path.insert(0, os.path.abspath('.'))
-
-import rainymotion
 
 project = 'rainymotion'
-copyright = '2018, Georgy Ayzel'
+copyright = '2019, Georgy Ayzel'
 author = 'Georgy Ayzel'
 
 # The short X.Y version
@@ -48,23 +38,10 @@ release = '0.1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.mathjax', 
-    'sphinx.ext.autosummary', 
-    'sphinx.ext.napoleon', 
-    'nbsphinx',
-    'sphinx.ext.mathjax'
-]
+extensions = ['nbsphinx']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
-
-# copied from wradlib docs
-# # get all rst files, do it manually
-rst_files = glob.glob('*.rst')
-autosummary_generate = rst_files
-autoclass_content = 'class'
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -84,16 +61,8 @@ language = None
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = ['_build', '**.ipynb_checkpoints']
-
-# -- nbsphinx specifics --
-
-# This allows sphinx-directives used within notebooks
-nbsphinx_allow_directives = True
-
-# do not execute notebooks ever while building docs
-nbsphinx_execute = 'never'
+# This pattern also affects html_static_path and html_extra_path.
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -104,23 +73,7 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
-
-html_theme_options = {
-    'canonical_url': '',
-    'analytics_id': '',
-    'logo_only': False,
-    'display_version': True,
-    'prev_next_buttons_location': 'bottom',
-    'style_external_links': False,
-    'vcs_pageview_mode': '',
-    # Toc options
-    'collapse_navigation': True,
-    'sticky_navigation': True,
-    'navigation_depth': 4,
-    'includehidden': True,
-    'titles_only': False
-}
+html_theme = 'sphinx_rtd_theme' #'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -200,17 +153,20 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-# -- Extension configuration -------------------------------------------------
 
-# -- Napoleon settings for docstring processing -------------------------------
-napoleon_google_docstring = True
-napoleon_numpy_docstring = True
-napoleon_include_private_with_doc = False
-napoleon_include_special_with_doc = False
-napoleon_include_init_with_doc = False
-napoleon_use_admonition_for_examples = False
-napoleon_use_admonition_for_notes = False
-napoleon_use_admonition_for_references = False
-napoleon_use_ivar = False
-napoleon_use_param = True
-napoleon_use_rtype = False
+# -- Options for Epub output -------------------------------------------------
+
+# Bibliographic Dublin Core info.
+epub_title = project
+
+# The unique identifier of the text. This can be a ISBN number
+# or the project homepage.
+#
+# epub_identifier = ''
+
+# A unique identification for the text.
+#
+# epub_uid = ''
+
+# A list of files that should not be packed into the epub file.
+epub_exclude_files = ['search.html']

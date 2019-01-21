@@ -3,7 +3,7 @@ How to use?
 
 The following tutorials and examples are stored in `Jupyter notebooks <http://jupyter.org/>`_. If you want to run them on your local computer, you need to:
 
-1. Properly install rainymotion library. Follow instructions provided in the :doc:`Getting Started <gettingstarted>` section.
+1. Properly install rainymotion library. Follow instructions provided in the :any:`Getting Started <../gettingstarted>` section.
 
 2. Move to the main rainymotion directory and run the command line there.
 
@@ -22,7 +22,7 @@ The following tutorials and examples are stored in `Jupyter notebooks <http://ju
     
 4. This will start the Jupyter notebook server and open a new tab in your default browser.
 
-.. image:: images/jupytertab.png
-   :target: images/jupytertab.png
+.. image:: ../_static/jupytertab.png
+   :target: ../_static/jupytertab.png
 
 If you are not familiar with Jupyter notebooks, please, read `the official documentation <https://jupyter.readthedocs.io/en/latest/index.html>`_.

@@ -1,8 +1,7 @@
 .. rainymotion documentation master file, created by
-   sphinx-quickstart on Mon Apr 30 10:18:58 2018.
+   sphinx-quickstart on Mon Jan 21 15:37:40 2019.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
-
 
 ``rainymotion``: Python library for radar-based precipitation nowcasting
 ========================================================================
