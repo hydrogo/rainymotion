@@ -1,0 +1,11 @@
+opencv
+numpy 
+scipy 
+scikit-learn 
+scikit-image 
+h5py 
+matplotlib 
+jupyter
+sphinx
+sphinx_rtd_theme
+nbsphinx
