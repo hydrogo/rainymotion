@@ -153,7 +153,57 @@ def _sparse_sd(data_instance,
 
 
 class Sparse:
+    """
+    The basic class for the Sparse model of the rainymotion library.
 
+    To run your nowcasting model you first have to set up a class instance as follows:
+
+    `model = Sparse()`
+
+    and then use class attributes to set up model parameters, e.g.:
+
+    `model.extrapolation = "linear"`
+
+    All class attributes have default values, for getting started with nowcasting you must specify only `input_data` attribute which holds the latest radar data observations. After specifying the input data, you can run nowcasting model and produce the corresponding results of nowcasting using `.run()` method:
+
+    `nowcasts = model.run()`
+
+    Attributes
+    ----------
+    input_data: 3D numpy array (frames, dim_x, dim_y) of radar data for previous hours. "frames" dimension must be > 2.
+
+    scaler: function, default=rainymotion.utils.RYScaler
+        Corner identification and optical flow algorithms require specific data type to perform calculations: uint8. That means that you must specify the transformation function (i.e. "scaler") to convert your "input_data" to the range of integers [0, 255]. By default we are using RYScaler which converts precipitation depth (mm, float16) to "brightness" values (uint8).
+
+    inverse_scaler: function, default=rainymotion.utils.inv_RYScaler
+        Function which does the inverse transformation of "brightness" values (uint8) to precipitation values.
+
+    lead_steps: int, default=12
+        Number of lead times for which we want to produce nowcasts. Must be > 0.
+
+    of_params: dict
+        The dictionary of corresponding Shi-Tomasi corner detector parameters (key "st_pars"), and Lukas-Kanade optical flow parameters (key "lk_pars").
+        The default dictionary for parameters is:
+        {'st_pars' : dict(maxCorners = 200,
+                           qualityLevel = 0.2,
+                           minDistance = 7,
+                           blockSize = 21 ),
+         'lk_pars' : dict(winSize  = (20,20),
+                           maxLevel = 2,
+                           criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}
+
+    extrapolation: str, default="linear"
+        The extrapolation method for precipitation features advection. Linear method establishes linear regression for every detected feature which then used to advect this feature to the imminent future.
+
+    warper: str, default="affine", options=["affine", "euclidean", "similarity", "projective"]
+        Warping technique used for transformation of the last available radar observation in accordance with advected features displacement.
+
+    Methods
+    -------
+    run(): perform calculation of nowcasts.
+        Return 3D numpy array of shape (lead_steps, dim_x, dim_y).
+
+    """
     def __init__(self):
 
         self.of_params =  {'st_pars' : dict(maxCorners = 200,
@@ -177,6 +227,14 @@ class Sparse:
         self.lead_steps = 12
 
     def run(self):
+        """
+        Run nowcasting calculations.
+
+        Returns
+        -------
+        nowcasts : 3D numpy array of shape (lead_steps, dim_x, dim_y).
+
+        """
 
         # define available transformations dictionary
         transformations = {'euclidean': sktf.EuclideanTransform(),
@@ -230,6 +288,57 @@ class Sparse:
 
 
 class SparseSD:
+    """
+    The basic class for the SparseSD model of the rainymotion library.
+
+    To run your nowcasting model you first have to set up a class instance as follows:
+
+    `model = SparseSD()`
+
+    and then use class attributes to set up model parameters, e.g.:
+
+    `model.warper = "affine"`
+
+    All class attributes have default values, for getting started with nowcasting you must specify only `input_data` attribute which holds the latest radar data observations. After specifying the input data, you can run nowcasting model and produce the corresponding results of nowcasting using `.run()` method:
+
+    `nowcasts = model.run()`
+
+    Attributes
+    ----------
+    input_data: 3D numpy array (frames, dim_x, dim_y) of radar data for previous hours. "frames" dimension must be > 2.
+
+    scaler: function, default=rainymotion.utils.RYScaler
+        Corner identification and optical flow algorithms require specific data type to perform calculations: uint8. That means that you must specify the transformation function (i.e. "scaler") to convert your "input_data" to the range of integers [0, 255]. By default we are using RYScaler which converts precipitation depth (mm, float16) to "brightness" values (uint8).
+
+    inverse_scaler: function, default=rainymotion.utils.inv_RYScaler
+        Function which does the inverse transformation of "brightness" values (uint8) to precipitation values.
+
+    lead_steps: int, default=12
+        Number of lead times for which we want to produce nowcasts. Must be > 0.
+
+    of_params: dict
+        The dictionary of corresponding Shi-Tomasi corner detector parameters (key "st_pars"), and Lukas-Kanade optical flow parameters (key "lk_pars").
+        The default dictionary for parameters is:
+        {'st_pars' : dict(maxCorners = 200,
+                           qualityLevel = 0.2,
+                           minDistance = 7,
+                           blockSize = 21 ),
+         'lk_pars' : dict(winSize  = (20,20),
+                           maxLevel = 2,
+                           criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0))}
+
+    extrapolation: str, default="simple_delta"
+        The extrapolation method for precipitation features advection. For "simple_delta" method we use an assumption that detected displacement of precipitation feature between the two latest radar observations will be constant for each lead time.
+
+    warper: str, default="affine", options=["affine", "euclidean", "similarity", "projective"]
+        Warping technique used for transformation of the last available radar observation in accordance with advected features displacement.
+
+    Methods
+    -------
+    run(): perform calculation of nowcasts.
+        Return 3D numpy array of shape (lead_steps, dim_x, dim_y).
+
+    """
 
     def __init__(self):
 
@@ -254,6 +363,14 @@ class SparseSD:
         self.lead_steps = 12
 
     def run(self):
+        """
+        Run nowcasting calculations.
+
+        Returns
+        -------
+        nowcasts : 3D numpy array of shape (lead_steps, dim_x, dim_y).
+
+        """
 
         # define available transformations dictionary
         transformations = {'euclidean': sktf.EuclideanTransform(),
@@ -471,6 +588,49 @@ def _interpolator(points, coord_source, coord_target, method="idw"):
     return points_interpolated.astype(points.dtype)
 
 class Dense:
+    """
+    The basic class for the Dense model of the rainymotion library.
+
+    To run your nowcasting model you first have to set up a class instance as follows:
+
+    `model = Dense()`
+
+    and then use class attributes to set up model parameters, e.g.:
+
+    `model.of_method = "DIS"`
+
+    All class attributes have default values, for getting started with nowcasting you must specify only `input_data` attribute which holds the latest radar data observations. After specifying the input data, you can run nowcasting model and produce the corresponding results of nowcasting using `.run()` method:
+
+    `nowcasts = model.run()`
+
+    Attributes
+    ----------
+    input_data: 3D numpy array (frames, dim_x, dim_y) of radar data for previous hours. "frames" dimension must be > 2.
+
+    scaler: function, default=rainymotion.utils.RYScaler
+        Corner identification and optical flow algorithms require specific data type to perform calculations: uint8. That means that you must specify the transformation function (i.e. "scaler") to convert your "input_data" to the range of integers [0, 255]. By default we are using RYScaler which converts precipitation depth (mm, float16) to "brightness" values (uint8).
+
+    lead_steps: int, default=12
+        Number of lead times for which we want to produce nowcasts. Must be > 0.
+
+    of_method: str, default="DIS", options=["DIS", "PCAFlow", "DeepFlow", "Farneback"]
+        The optical flow method to obtain the dense representation (in every image pixel) of motion field. By default we use the Dense Inverse Search algorithm (DIS). PCAFlow, DeepFlow, and Farneback algoritms are also available to obtain motion field.
+
+    advection: str, default="constant-vector"
+        The advection scheme we use for extrapolation of every image pixel into the imminent future.
+
+    direction: str, default="backward", options=["forward", "backward"]
+        The direction option of the advection scheme.
+
+    interpolation: str, default="idw", options=["idw", "nearest", "linear"]
+        The interpolation method we use to interpolate advected pixel values to the original grid of the radar image. By default we use inverse distance weightning interpolation (idw) as proposed in wradlib.ipol.Idw, but interpolation techniques from scipy.interpolate (e.g., "nearest" or "linear") could also be used.
+
+    Methods
+    -------
+    run(): perform calculation of nowcasts.
+        Return 3D numpy array of shape (lead_steps, dim_x, dim_y).
+
+    """
 
     def __init__(self):
 
@@ -482,13 +642,21 @@ class Dense:
 
         self.of_method = "DIS"
 
-        self.direction = "forward"
+        self.direction = "backward"
 
         self.advection = "constant-vector"
 
         self.interpolation = "idw"
 
     def run(self):
+        """
+        Run nowcasting calculations.
+
+        Returns
+        -------
+        nowcasts : 3D numpy array of shape (lead_steps, dim_x, dim_y).
+
+        """
 
         # scale input data to uint8 [0-255] with self.scaler
         scaled_data, c1, c2 = self.scaler(self.input_data)
@@ -516,6 +684,49 @@ class Dense:
 
 
 class DenseRotation:
+    """
+    The basic class for the Dense model of the rainymotion library.
+
+    To run your nowcasting model you first have to set up a class instance as follows:
+
+    `model = Dense()`
+
+    and then use class attributes to set up model parameters, e.g.:
+
+    `model.of_method = "DIS"`
+
+    All class attributes have default values, for getting started with nowcasting you must specify only `input_data` attribute which holds the latest radar data observations. After specifying the input data, you can run nowcasting model and produce the corresponding results of nowcasting using `.run()` method:
+
+    `nowcasts = model.run()`
+
+    Attributes
+    ----------
+    input_data: 3D numpy array (frames, dim_x, dim_y) of radar data for previous hours. "frames" dimension must be > 2.
+
+    scaler: function, default=rainymotion.utils.RYScaler
+        Corner identification and optical flow algorithms require specific data type to perform calculations: uint8. That means that you must specify the transformation function (i.e. "scaler") to convert your "input_data" to the range of integers [0, 255]. By default we are using RYScaler which converts precipitation depth (mm, float16) to "brightness" values (uint8).
+
+    lead_steps: int, default=12
+        Number of lead times for which we want to produce nowcasts. Must be > 0.
+
+    of_method: str, default="DIS", options=["DIS", "PCAFlow", "DeepFlow", "Farneback"]
+        The optical flow method to obtain the dense representation (in every image pixel) of motion field. By default we use the Dense Inverse Search algorithm (DIS). PCAFlow, DeepFlow, and Farneback algoritms are also available to obtain motion field.
+
+    advection: str, default="semi-lagrangian"
+        The advection scheme we use for extrapolation of every image pixel into the imminent future.
+
+    direction: str, default="backward", options=["forward", "backward"]
+        The direction option of the advection scheme.
+
+    interpolation: str, default="idw", options=["idw", "nearest", "linear"]
+        The interpolation method we use to interpolate advected pixel values to the original grid of the radar image. By default we use inverse distance weightning interpolation (idw) as proposed in wradlib.ipol.Idw, but interpolation techniques from scipy.interpolate (e.g., "nearest" or "linear") could also be used.
+
+    Methods
+    -------
+    run(): perform calculation of nowcasts.
+        Return 3D numpy array of shape (lead_steps, dim_x, dim_y).
+
+    """
 
     def __init__(self):
 
@@ -527,13 +738,21 @@ class DenseRotation:
 
         self.of_method = "DIS"
 
-        self.direction = "forward"
+        self.direction = "backward"
 
         self.advection = "semi-lagrangian"
 
         self.interpolation = "idw"
 
     def run(self):
+        """
+        Run nowcasting calculations.
+
+        Returns
+        -------
+        nowcasts : 3D numpy array of shape (lead_steps, dim_x, dim_y).
+
+        """
 
         # scale input data to uint8 [0-255] with self.scaler
         scaled_data, c1, c2 = self.scaler(self.input_data)
@@ -563,25 +782,33 @@ class DenseRotation:
 class Persistence:
 
     """
-    The basic class for the Eulerian Persistence (Persistence) model implementation (weak baseline solution).
+    The basic class of the Eulerian Persistence model (Persistence) of the rainymotion library.
 
-    Parameters
+    To run your nowcasting model you first have to set up a class instance as follows:
+
+    `model = Persistence()`
+
+    and then use class attributes to set up model parameters, e.g.:
+
+    `model.lead_steps = 12`
+
+    For getting started with nowcasting you must specify only `input_data` attribute which holds the latest radar data observations. After specifying the input data, you can run nowcasting model and produce the corresponding results of nowcasting using `.run()` method:
+
+    `nowcasts = model.run()`
+
+    Attributes
     ----------
 
-    input_data: numpy.ndarray
-        8-bit (uint8, 0-255) 3D numpy.ndarray (frames, dim_x, dim_y) of radar data for previous 10 minutes (2 frames)
+    input_data: 3D numpy array (frames, dim_x, dim_y) of radar data for previous hours. "frames" dimension must be > 2.
 
-        Default value: None
+    lead_steps: int, default=12
+        Number of lead times for which we want to produce nowcasts. Must be > 0.
 
-    lead_steps: int
-        The required lead steps of nowcasting
+    Methods
+    -------
+    run(): perform calculation of nowcasts.
+        Return 3D numpy array of shape (lead_steps, dim_x, dim_y).
 
-        Default value: 12
-
-    Examples
-    --------
-
-    See :ref:`/notebooks/nowcasting.ipynb`.
     """
 
     def __init__(self):
@@ -591,17 +818,14 @@ class Persistence:
         self.lead_steps = 12
 
     def run(self):
-        '''
-        The method for running the Sparse model with the parameters were specified in the EulerianPersistence class parameters.
+        """
+        Run nowcasting calculations.
 
-        For running with the default parameters only the input data instance is required (.input_data parameter).
+        Returns
+        -------
+        nowcasts : 3D numpy array of shape (lead_steps, dim_x, dim_y).
 
-        Args:
-            None
-
-        Returns:
-            numpy.ndarray: 3D numpy.ndarray of precipitation nowcasting (frames, dim_x, dim_y)
-        '''
+        """
 
         last_frame = self.input_data[-1, :, :]
 

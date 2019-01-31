@@ -1,16 +1,5 @@
 """
-``rainymotion.utils``: scaling data for optical flow based nowcasting models
-============================================================================
-
-.. autosummary::
-   :nosignatures:
-   :toctree: generated/
-
-    depth2intensity
-    intensity2depth
-    RYScaler
-    inv_RYScaler
-    
+The rainymotion library provides different utils to help to prepare raw radar data for nowcasting
   
 """
 
@@ -24,15 +13,15 @@ def depth2intensity(depth, interval=300):
     """
     Function for convertion rainfall depth (in mm) to
     rainfall intensity (mm/h)
-    
+
     Args:
         depth: float
         float or array of float
         rainfall depth (mm)
-        
+
         interval : number
         time interval (in sec) which is correspondend to depth values
-        
+
     Returns:
         intensity: float
         float or array of float
@@ -44,15 +33,15 @@ def intensity2depth(intensity, interval=300):
     """
     Function for convertion rainfall intensity (mm/h) to
     rainfall depth (in mm)
-    
+
     Args:
         intensity: float
         float or array of float
         rainfall intensity (mm/h)
-                
+
         interval : number
         time interval (in sec) which is correspondend to depth values
-        
+
     Returns:
         depth: float
         float or array of float
@@ -63,7 +52,7 @@ def intensity2depth(intensity, interval=300):
 def RYScaler(X_mm):
     '''
     Scale RY data from mm (in float64) to brightness (in uint8).
-    
+
     Args:
         X (numpy.ndarray): RY radar image
 
@@ -71,24 +60,24 @@ def RYScaler(X_mm):
         numpy.ndarray(uint8): brightness integer values from 0 to 255 for corresponding input rainfall intensity
         float: c1, scaling coefficient
         float: c2, scaling coefficient
-        
+
     '''
     def mmh2rfl(r, a=256., b=1.42):
         '''
         .. based on wradlib.zr.r2z function
-        
+
         .. r --> z
         '''
         return a * r ** b
-    
+
     def rfl2dbz(z):
         '''
         .. based on wradlib.trafo.decibel function
-        
+
         .. z --> d
         '''
         return 10. * np.log10(z)
-    
+
     # mm to mm/h
     X_mmh = depth2intensity(X_mm)
     # mm/h to reflectivity
@@ -110,13 +99,13 @@ def RYScaler(X_mm):
 def inv_RYScaler(X_scl, c1, c2):
     '''
     Transfer brightness (in uint8) to RY data (in mm).
-    Function which is inverse to Scaler() function. 
+    Function which is inverse to Scaler() function.
 
     Args:
         X_scl (numpy.ndarray): array of brightness integers obtained from Scaler() function.
         c1: first scaling coefficient obtained from Scaler() function.
         c2: second scaling coefficient obtained from Scaler() function.
-    
+
     Returns:
         numpy.ndarray(float): RY radar image
 
@@ -124,19 +113,19 @@ def inv_RYScaler(X_scl, c1, c2):
     def dbz2rfl(d):
         '''
         .. based on wradlib.trafo.idecibel function
-        
+
         .. d --> z
         '''
         return 10. ** (d / 10.)
-    
+
     def rfl2mmh(z, a=256., b=1.42):
         '''
         .. based on wradlib.zr.z2r function
-        
+
         .. z --> r
         '''
         return (z / a) ** (1. / b)
-    
+
     # decibels to reflectivity
     X_rfl = dbz2rfl((X_scl / 255)*(c2 - c1) + c1)
     # 0 dBz are 0 reflectivity, not 1
