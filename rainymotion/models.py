@@ -551,8 +551,8 @@ def _advection_semi_lagrangian(of_instance, lead_steps=12):
         coord_source = [coord_source_j.ravel(), coord_source_i.ravel()]
 
         # update deltas
-        delta_xi = map_coordinates(delta_x, coord_source).reshape(of_instance.shape[1], of_instance.shape[0])
-        delta_yi = map_coordinates(delta_y, coord_source).reshape(of_instance.shape[1], of_instance.shape[0])
+        delta_xi = map_coordinates(delta_x, coord_source).reshape(of_instance.shape[0], of_instance.shape[1])
+        delta_yi = map_coordinates(delta_y, coord_source).reshape(of_instance.shape[0], of_instance.shape[1])
 
     # reinitialization of coordinates source
     coord_source_i, coord_source_j = np.meshgrid(range(of_instance.shape[1]), range(of_instance.shape[0]))
