@@ -4,7 +4,7 @@ channels:
 dependencies:
   - python=3
   - wradlib
-  - opencv
+  - opencv=3.4.*
   - numpy
   - scipy
   - scikit-learn
