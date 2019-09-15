@@ -130,7 +130,8 @@ def _sparse_sd(data_instance,
     last_frame = data_instance[-1]
 
     # find features to track
-    old_corners = cv2.goodFeaturesToTrack(data_instance[0], mask=None, **of_params['st_pars'])
+    old_corners = cv2.goodFeaturesToTrack(data_instance[0], mask=None,
+                                          **of_params['st_pars'])
 
     # track corners by optical flow algorithm
     new_corners, st, err = cv2.calcOpticalFlowPyrLK(prevImg=penult_frame,
@@ -365,8 +366,10 @@ class SparseSD:
         displacement of precipitation feature between the two latest radar
         observations will be constant for each lead time.
 
-    warper: str, default="affine", options=["affine", "euclidean", "similarity", "projective"]
-        Warping technique used for transformation of the last available radar observation in accordance with advected features displacement.
+    warper: str, default="affine", options=["affine", "euclidean", "similarity",
+                                            "projective"]
+        Warping technique used for transformation of the last available radar
+        observation in accordance with advected features displacement.
 
     Methods
     -------
@@ -542,7 +545,8 @@ def _advection_constant_vector(of_instance, lead_steps=12):
     delta_y = of_instance[::, ::, 1]
 
     # make a source meshgrid
-    coord_source_i, coord_source_j = np.meshgrid(range(of_instance.shape[1]), range(of_instance.shape[0]))
+    coord_source_i, coord_source_j = np.meshgrid(range(of_instance.shape[1]),
+                                                 range(of_instance.shape[0]))
 
     # calculate new coordinates of radar pixels
     coord_targets = []
@@ -662,7 +666,8 @@ class Dense:
     lead_steps: int, default=12
         Number of lead times for which we want to produce nowcasts. Must be > 0
 
-    of_method: str, default="DIS", options=["DIS", "PCAFlow", "DeepFlow", "Farneback"]
+    of_method: str, default="DIS", options=["DIS", "PCAFlow", "DeepFlow",
+                                            "Farneback"]
         The optical flow method to obtain the dense representation (in every
         image pixel) of motion field. By default we use the Dense Inverse
         Search algorithm (DIS). PCAFlow, DeepFlow, and Farneback algoritms
@@ -678,9 +683,9 @@ class Dense:
     interpolation: str, default="idw", options=["idw", "nearest", "linear"]
         The interpolation method we use to interpolate advected pixel values
         to the original grid of the radar image. By default we use inverse
-        distance weightning interpolation (idw) as proposed in wradlib.ipol.Idw,
-        but interpolation techniques from scipy.interpolate (e.g., "nearest"
-        or "linear") could also be used.
+        distance weightning interpolation (Idw) as proposed in library wradlib
+        (wradlib.ipol.Idw), but interpolation techniques from scipy.interpolate
+        (e.g., "nearest" or "linear") could also be used.
 
     Methods
     -------
@@ -733,7 +738,9 @@ class Dense:
 
         # interpolation
         for lead_step in range(self.lead_steps):
-            nowcasts.append(_interpolator(self.input_data[-1], coord_source, coord_targets[lead_step], method=self.interpolation))
+            nowcasts.append(_interpolator(self.input_data[-1], coord_source,
+                                          coord_targets[lead_step],
+                                          method=self.interpolation))
 
         # reshaping
         nowcasts = np.moveaxis(np.dstack(nowcasts), -1, 0)
@@ -778,7 +785,8 @@ class DenseRotation:
     lead_steps: int, default=12
         Number of lead times for which we want to produce nowcasts. Must be > 0
 
-    of_method: str, default="DIS", options=["DIS", "PCAFlow", "DeepFlow", "Farneback"]
+    of_method: str, default="DIS", options=["DIS", "PCAFlow", "DeepFlow",
+                                            "Farneback"]
         The optical flow method to obtain the dense representation (in every
         image pixel) of motion field. By default we use the Dense Inverse
         Search algorithm (DIS). PCAFlow, DeepFlow, and Farneback algoritms
