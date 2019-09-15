@@ -1,6 +1,7 @@
 """
-The rainymotion library provides different utils to help to prepare raw radar data for nowcasting
-  
+The rainymotion library provides different utils to help to prepare
+raw radar data (dBZ) for nowcasting.
+
 """
 
 from __future__ import absolute_import
@@ -8,6 +9,7 @@ from __future__ import division
 from __future__ import print_function
 
 import numpy as np
+
 
 def depth2intensity(depth, interval=300):
     """
@@ -29,6 +31,7 @@ def depth2intensity(depth, interval=300):
     """
     return depth * 3600 / interval
 
+
 def intensity2depth(intensity, interval=300):
     """
     Function for convertion rainfall intensity (mm/h) to
@@ -49,6 +52,7 @@ def intensity2depth(intensity, interval=300):
     """
     return intensity * interval / 3600
 
+
 def RYScaler(X_mm):
     '''
     Scale RY data from mm (in float64) to brightness (in uint8).
@@ -57,7 +61,8 @@ def RYScaler(X_mm):
         X (numpy.ndarray): RY radar image
 
     Returns:
-        numpy.ndarray(uint8): brightness integer values from 0 to 255 for corresponding input rainfall intensity
+        numpy.ndarray(uint8): brightness integer values from 0 to 255
+                              for corresponding input rainfall intensity
         float: c1, scaling coefficient
         float: c2, scaling coefficient
 
@@ -94,7 +99,8 @@ def RYScaler(X_mm):
     c1 = X_dbz.min()
     c2 = X_dbz.max()
 
-    return ( (X_dbz - c1) / (c2 - c1) * 255 ).astype(np.uint8), c1, c2
+    return ((X_dbz - c1) / (c2 - c1) * 255).astype(np.uint8), c1, c2
+
 
 def inv_RYScaler(X_scl, c1, c2):
     '''
@@ -102,7 +108,8 @@ def inv_RYScaler(X_scl, c1, c2):
     Function which is inverse to Scaler() function.
 
     Args:
-        X_scl (numpy.ndarray): array of brightness integers obtained from Scaler() function.
+        X_scl (numpy.ndarray): array of brightness integers obtained
+                               from Scaler() function.
         c1: first scaling coefficient obtained from Scaler() function.
         c2: second scaling coefficient obtained from Scaler() function.
 
